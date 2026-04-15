@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-FILING PAPERS - আন্তর্জাতিক মানের প্রত্যয়ন পত্র জেনারেটর</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- QR Code Library (আধুনিক ও লাইটওয়েট) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- jsPDF for PDF Download (আধুনিক PDF জেনারেটর) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary: #0f172a;
+            --accent: #1e40af;
+            --gold: #d4af77;
+        }
+
+        * {
+            font-family: 'Hind Siliguri', 'Inter', system-ui, sans-serif;
+        }
+
+        .letterhead {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fc 100%);
+            border: 14px solid #0f172a;
+            box-shadow: 0 35px 60px -15px rgb(15 23 42 / 0.3),
+                        0 0 0 8px #d4af77;
+            padding: 55px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* সুন্দর ওয়াটারমার্ক */
+        .letterhead::before {
+            content: 'E-FILING PAPERS';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-35deg);
+            font-size: 92px;
+            font-weight: 900;
+            color: #0f172a;
+            opacity: 0.04;
+            letter-spacing: 12px;
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+        }
+
+        /* লোগো গ্রেডিয়েন্ট */
+        .logo-gradient {
+            background: linear-gradient(135deg, #0f172a, #1e40af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .certificate-body {
+            position: relative;
+            z-index: 10;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #certificate, #certificate * { visibility: visible; }
+            #certificate {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+                border: 12px solid #0f172a;
+                margin: 0;
+                padding: 45px;
+            }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 to-slate-900 text-slate-800">
+
+    <!-- নেভিগেশন (আধুনিক ডার্ক থিম) -->
+    <nav class="bg-[#0f172a] border-b border-[#d4af77]/20 text-white sticky top-0 z-50 shadow-xl">
+        <div class="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
+            <!-- লোগো -->
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#d4af77] to-[#1e40af] rounded-2xl flex items-center justify-center shadow-inner text-4xl rotate-12">
+                    📄
+                </div>
+                <div>
+                    <h1 class="text-4xl font-bold tracking-[-2px] logo-gradient">E-FILING PAPERS</h1>
+                    <p class="text-xs tracking-[2px] text-[#d4af77] -mt-1 font-medium">INTERNATIONAL STANDARD • SINCE 2024</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-10 text-sm font-medium">
+                <a onclick="window.location.reload()" class="hover:text-[#d4af77] transition-colors flex items-center gap-2">
+                    <span>✦</span> নতুন প্রত্যয়ন পত্র
+                </a>
+                <div class="flex items-center gap-2 px-5 py-2.5 bg-white/10 rounded-3xl border border-[#d4af77]/30 backdrop-blur-md">
+                    <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                    LIVE • আপডেটেড ২০২৬
+                </div>
+                <div class="text-right">
+                    <p class="text-xs opacity-75">প্রতিষ্ঠাতা</p>
+                    <p class="font-semibold text-[#d4af77]">মোঃ আসিফুজ্জামান</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-8 py-12">
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-12">
+
+            <!-- ফর্ম সেকশন (আধুনিক কার্ড) -->
+            <div class="xl:col-span-5 no-print">
+                <div class="bg-white rounded-3xl shadow-2xl p-8 lg:p-10 border border-slate-200">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="text-4xl">📜</div>
+                        <h2 class="text-3xl font-semibold text-[#0f172a]">আন্তর্জাতিক মানের প্রত্যয়ন পত্র তৈরি করুন</h2>
+                    </div>
+
+                    <div class="space-y-7">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-2">প্রাপকের পূর্ণ নাম</label>
+                            <input id="recipient" type="text" 
+                                   class="w-full px-6 py-5 border border-slate-300 rounded-3xl focus:border-[#1e40af] focus:ring-2 focus:ring-[#1e40af]/20 text-lg outline-none transition"
+                                   placeholder="কাস্টমারের নাম" value="মোঃ রহিম উদ্দিন">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-600 mb-2">তারিখ</label>
+                                <input id="date" type="date" class="w-full px-6 py-5 border border-slate-300 rounded-3xl focus:border-[#1e40af] text-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-600 mb-2">সার্টিফিকেট নম্বর</label>
+                                <input id="certId" readonly type="text" 
+                                       class="w-full px-6 py-5 bg-slate-50 border border-slate-300 rounded-3xl text-lg font-mono">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-2">প্রত্যয়নের শিরোনাম</label>
+                            <input id="title" type="text" 
+                                   class="w-full px-6 py-5 border border-slate-300 rounded-3xl focus:border-[#1e40af] text-lg"
+                                   value="প্রত্যয়ন পত্র / Certificate of Experience">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-2">বিস্তারিত অভিজ্ঞতা / বিবরণ</label>
+                            <textarea id="body" rows="7"
+                                      class="w-full px-6 py-5 border border-slate-300 rounded-3xl focus:border-[#1e40af] text-lg leading-relaxed resize-y"></textarea>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <button onclick="generateCertificate()" 
+                                    class="flex-1 bg-[#0f172a] hover:bg-[#1e40af] transition-all text-white font-semibold text-xl py-7 rounded-3xl flex items-center justify-center gap-3 shadow-xl shadow-[#0f172a]/30">
+                                <span>সার্টিফিকেট তৈরি করুন</span>
+                                <span class="text-3xl">→</span>
+                            </button>
+                            <button onclick="downloadPDF()" 
+                                    class="flex-1 bg-gradient-to-r from-[#d4af77] to-[#1e40af] hover:brightness-110 transition-all text-white font-semibold text-xl py-7 rounded-3xl flex items-center justify-center gap-3 shadow-xl">
+                                📥 PDF ডাউনলোড করুন
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- প্রিভিউ সেকশন -->
+            <div class="xl:col-span-7 no-print">
+                <div class="flex justify-between items-baseline mb-6 px-3">
+                    <h2 class="text-3xl font-semibold text-white">লেটারহেড প্রিভিউ (আন্তর্জাতিক মানের)</h2>
+                    <button onclick="printCertificate()" 
+                            class="flex items-center gap-3 bg-white text-[#0f172a] hover:bg-[#d4af77] px-7 py-4 rounded-3xl font-semibold text-lg shadow-inner">
+                        🖨️ প্রিন্ট করুন
+                    </button>
+                </div>
+
+                <!-- আধুনিক লেটারহেড -->
+                <div id="certificate" class="letterhead">
+                    <div class="certificate-body">
+
+                        <!-- হেডার সেকশন (লোগো + কোম্পানি ইনফো) -->
+                        <div class="flex justify-between items-start mb-10">
+                            <!-- লোগো -->
+                            <div class="flex items-center gap-3">
+                                <div class="w-16 h-16 bg-gradient-to-br from-[#d4af77] to-[#1e40af] rounded-3xl flex items-center justify-center text-5xl shadow-inner rotate-12">
+                                    📄
+                                </div>
+                                <div>
+                                    <h1 class="text-5xl font-bold tracking-[-3px] text-[#0f172a]">E-FILING PAPERS</h1>
+                                    <p class="text-xl text-[#1e40af] font-medium -mt-2">Online Filing Solutions</p>
+                                </div>
+                            </div>
+
+                            <!-- ডানদিকে কনট্যাক্ট -->
+                            <div class="text-right text-sm leading-tight">
+                                <p class="font-semibold text-[#0f172a]">সেরুডাঙ্গা, মিঠাপুকুর, রংপুর</p>
+                                <p class="text-slate-600">বাংলাদেশ</p>
+                                <div class="h-px bg-[#d4af77] my-3 w-48 ml-auto"></div>
+                                <p class="font-medium">মোবাইল: 01625-353584, 01784-499362</p>
+                                <p class="font-medium">ইমেইল: <a href="mailto:efiling.papers@gmail.com" class="text-[#1e40af]">efiling.papers@gmail.com</a></p>
+                                <p class="text-xs mt-4 text-slate-500">প্রতিষ্ঠাতা: মোঃ আসিফুজ্জামান</p>
+                            </div>
+                        </div>
+
+                        <!-- সার্টিফিকেট টাইটেল -->
+                        <div id="preview-header" class="text-center mb-8">
+                            <div id="preview-cert-id" class="inline-flex items-center gap-2 bg-[#0f172a] text-white text-sm font-mono px-6 py-2 rounded-3xl mb-4"></div>
+                            <h2 id="preview-title" class="text-5xl font-bold text-[#0f172a] tracking-tight"></h2>
+                        </div>
+
+                        <!-- তারিখ + প্রাপক -->
+                        <div class="flex justify-between mb-8 text-lg">
+                            <div>
+                                <span class="font-medium text-slate-600">প্রাপক:</span><br>
+                                <span id="preview-recipient" class="font-semibold text-2xl"></span>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-medium text-slate-600">তারিখ:</span><br>
+                                <span id="preview-date" class="font-semibold text-2xl"></span>
+                            </div>
+                        </div>
+
+                        <!-- মূল বডি -->
+                        <div id="preview-body" class="text-[21px] leading-[1.85] text-justify text-slate-800 min-h-[340px] mb-12"></div>
+
+                        <!-- স্বাক্ষর + QR -->
+                        <div class="flex justify-between items-end mt-12">
+                            <div>
+                                <!-- QR কোড -->
+                                <div id="qrcode-container" class="bg-white p-3 rounded-2xl shadow-inner border border-slate-200 inline-block"></div>
+                                <p class="text-xs text-slate-500 mt-2 text-center">স্ক্যান করে যাচাই করুন</p>
+                            </div>
+
+                            <div class="text-right">
+                                <p class="text-slate-600 mb-1">আপনার বিশ্বস্ত সেবায়,</p>
+                                <div class="border-t-2 border-[#0f172a] w-72 mb-3"></div>
+                                <p class="font-semibold text-3xl text-[#0f172a]">মোঃ আসিফুজ্জামান</p>
+                                <p class="text-[#1e40af] text-xl">প্রতিষ্ঠাতা ও স্বত্বাধিকারী</p>
+                                <p class="text-xs text-slate-500 mt-6">এই প্রত্যয়নপত্রটি ডিজিটালি সাইন ও ভেরিফাইড।</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-[#0f172a] text-white/70 py-8 text-center text-xs no-print">
+        <p>© ২০২৬ E-FILING PAPERS • আন্তর্জাতিক মানের অনলাইন প্রত্যয়ন পত্র ব্যবস্থা • রংপুর, বাংলাদেশ</p>
+        <p class="mt-1">এই ওয়েবসাইটটি সম্পূর্ণ অফলাইনেও কাজ করবে • আপডেটেড এপ্রিল ২০২৬</p>
+    </footer>
+
+    <script>
+        let currentCertId = '';
+
+        // Tailwind ইনিশিয়ালাইজ
+        function initializeTailwind() {
+            return {
+                config(userConfig = {}) {
+                    return { content: [], theme: { extend: {} }, plugins: [], ...userConfig };
+                }
+            };
+        }
+
+        // আজকের তারিখ সেট
+        function setTodayDate() {
+            const dateInput = document.getElementById('date');
+            const today = new Date();
+            dateInput.value = today.toISOString().split('T')[0];
+        }
+
+        // নতুন সার্টিফিকেট আইডি জেনারেট
+        function generateCertId() {
+            const year = new Date().getFullYear();
+            const random = String(Math.floor(10000 + Math.random() * 90000));
+            currentCertId = `EFP-\( {year}- \){random}`;
+            document.getElementById('certId').value = currentCertId;
+            return currentCertId;
+        }
+
+        // সার্টিফিকেট জেনারেট
+        function generateCertificate() {
+            const recipient = document.getElementById('recipient').value.trim() || 'মাননীয় ক্লায়েন্ট';
+            const dateInput = document.getElementById('date').value;
+            const title = document.getElementById('title').value.trim() || 'প্রত্যয়ন পত্র';
+            const bodyText = document.getElementById('body').value.trim();
+
+            // তারিখ বাংলায় ফরম্যাট
+            let formattedDate = '১৫ এপ্রিল ২০২৬';
+            if (dateInput) {
+                const date = new Date(dateInput);
+                formattedDate = date.toLocaleDateString('bn-BD', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            }
+
+            // প্রিভিউ আপডেট
+            document.getElementById('preview-recipient').innerHTML = recipient;
+            document.getElementById('preview-date').innerHTML = formattedDate;
+            document.getElementById('preview-title').innerHTML = title;
+            document.getElementById('preview-body').innerHTML = bodyText 
+                ? bodyText.replace(/\n/g, '<br><br>') 
+                : `এই প্রত্যয়নপত্র দ্বারা স্বীকৃত হয় যে জনাব ${recipient} আমাদের প্রতিষ্ঠান <strong>E-FILING PAPERS</strong> এর সাথে সফলভাবে যুক্ত ছিলেন এবং তাঁর সেবা/কাজ অত্যন্ত দক্ষতার সাথে সম্পন্ন করেছেন।`;
+
+            // সার্টিফিকেট আইডি প্রিভিউতে দেখানো
+            const certIdEl = document.getElementById('preview-cert-id');
+            certIdEl.innerHTML = `
+                <span class="px-4">CERTIFICATE ID</span> 
+                <span class="bg-[#d4af77] text-[#0f172a] px-5 py-1 rounded-3xl font-bold">${currentCertId}</span>
+            `;
+
+            // QR কোড জেনারেট (আধুনিক ও স্ক্যানেবল)
+            const qrContainer = document.getElementById('qrcode-container');
+            qrContainer.innerHTML = ''; // পুরনো ক্লিয়ার
+            new QRCode(qrContainer, {
+                text: `https://efiling.papers.com/verify?cert=\( {currentCertId}&recipient= \){encodeURIComponent(recipient)}`,
+                width: 138,
+                height: 138,
+                colorDark: "#0f172a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // স্ক্রল করে প্রিভিউ দেখানো
+            document.getElementById('certificate').scrollIntoView({ behavior: 'smooth' });
+
+            console.log('%c✅ আন্তর্জাতিক মানের সার্টিফিকেট তৈরি হয়েছে!', 'color:#d4af77; font-weight:900; font-size:16px');
+        }
+
+        // PDF ডাউনলোড (jsPDF দিয়ে আধুনিক)
+        function downloadPDF() {
+            if (!currentCertId) {
+                alert('প্রথমে সার্টিফিকেট তৈরি করুন!');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [850, 1100]
+            });
+
+            // লেটারহেডের HTML কে canvas করে নেয়া (সহজতম)
+            const certificate = document.getElementById('certificate');
+            
+            // স্কেল করে সুন্দর করে রাখা
+            doc.html(certificate, {
+                callback: function (doc) {
+                    doc.save(`EFP-${currentCertId}.pdf`);
+                },
+                x: 30,
+                y: 30,
+                width: 790,
+                windowWidth: 850,
+                html2canvas: { scale: 0.85 }
+            });
+        }
+
+        // প্রিন্ট
+        function printCertificate() {
+            window.print();
+        }
+
+        // পেজ লোড
+        window.onload = function () {
+            initializeTailwind();
+            setTodayDate();
+            generateCertId();
+
+            // ডিফল্ট টেক্সট (উদাহরণ)
+            document.getElementById('body').value = `জনাব মোঃ রহিম উদ্দিন গত ১৮ মাস ধরে E-FILING PAPERS এর সাথে অনলাইন ফাইলিং, ডকুমেন্ট প্রসেসিং এবং ক্লায়েন্ট সাপোর্ট সার্ভিসে যুক্ত ছিলেন। তাঁর কাজের দক্ষতা, সময়ানুবর্তিতা এবং পেশাদারিত্ব অত্যন্ত উচ্চমানের। আমরা তাঁর ভবিষ্যত সাফল্য কামনা করি।`;
+
+            console.log('%c🚀 E-FILING PAPERS আন্তর্জাতিক মানের সার্টিফিকেট জেনারেটর লোড হয়েছে!', 'color:#d4af77; font-size:18px; font-weight:bold; letter-spacing:1px');
+        };
+    </script>
+</body>
+</html>
